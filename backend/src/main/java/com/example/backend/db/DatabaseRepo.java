@@ -10,7 +10,7 @@ public class DatabaseRepo implements DatabaseRepoInterface{
 
     @Override
     public Integer insert() {
-        final String sql = "INSERT INTO ordertable (name, surname, mail, phone, comment, postal, city, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO ordertable (name, surname, mail, phone, comment, postal, city, address, paperBacking, promoCode, payment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DB.source().getConnection();
         PreparedStatement stm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
             for (int i = 1; i <= 8; i++) {  // Set all placeholders to null
