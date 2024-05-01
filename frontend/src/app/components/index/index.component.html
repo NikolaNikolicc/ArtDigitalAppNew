@@ -1,0 +1,207 @@
+<div class="flex-container d-flex overflow-auto justify-content-center">
+
+    <div class="row text-center" style="width: 100%">
+        <!-- This is where the modal would typically be initialized, separate from the main content flow -->
+        <div class="modal" id="notificationModal" #notificationModal tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Važno obaveštenje!</h3>
+                    </div>
+
+                    <div class="modal-body text-start">
+                        <ul>
+                            <li>Rok za isporuku fotografija je do 7 radnih dana</li>
+                            <li>Ukoliko na drugom koraku izaberete "bez akcije", nemate pravo na poklone</li>
+                            <li>Ukoliko na drugom koraku izaberete "želim akciju", na svakih 100 fotografija imate pravo
+                                na 6 poklona (ako izaberete 500 fotografija, otvoriće vam se opcija da izaberete 5 seta
+                                poklona)</li>
+                        </ul>
+                        <hr>
+                        Molimo Vas pročitate ovu poruku i uvažite ovo obaveštenje kako biste uštedeli naše vreme i Vaše
+                        fotografije dobili u što kraćem roku. Hvala Vam na razumevanju.
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Razumem</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="errorModal" #errorModal tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Greška</h3>
+                    </div>
+
+                    <div class="modal-body text-start">
+                        {{this.error}}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Razumem</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main content -->
+        <div class="col-sm-4"></div> <!-- Empty column for spacing -->
+        <div class="col-sm-4">
+            <br>
+            <button class="btn btn-danger w-100" (click)="photoInput.click()">
+                <span *ngIf="imageBlobs.length == 0">DODAJ SLIKE</span>
+                <span *ngIf="imageBlobs.length != 0">DODAJ JOŠ SLIKA</span>
+            </button>
+        </div>
+        <div class="col-sm-4"></div> <!-- Empty column for spacing -->
+        <br><br><br>
+        <!-- hidden photo input -->
+        <input type="file" #photoInput hidden multiple (change)="onFilesSelected($event)">
+
+
+        <!-- choose photo dimensions -->
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <h3>Podesite dimenziju svih fotografija:</h3><br>
+            <select class="form-select text-center" name="" id="" [(ngModel)]="photoFormat"
+                (change)="setAllFormats($event)">
+                <option value="" disabled selected>--IZABERITE ŽELJENI FORMAT--</option>
+                <option value="9x13">9x13</option>
+                <option value="10x15">10x15</option>
+                <option value="13x18">13x18</option>
+                <option value="polaroid">polaroid</option>
+                <!-- ... more options ... -->
+            </select>
+            <br>
+        </div>
+        <div class="col-sm-4"></div>
+        <!-- choose paper type -->
+        <div class="col-12 mt-3">
+            <h3>Izaberite tip podloge papira:</h3>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="paperBacking" id="mat" [(ngModel)]="paperBacking"
+                    value="mat" checked>
+                <label class="form-check-label" for="mat">Mat</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="paperBacking" id="sjaj" [(ngModel)]="paperBacking"
+                    value="sjaj">
+                <label class="form-check-label" for="sjaj">Sjaj</label>
+            </div>
+        </div>
+        <!-- next button -->
+        <div class="col-sm-4"></div> <!-- Empty column for spacing -->
+        <div class="col-sm-4">
+            <br>
+            <button class="btn btn-danger w-100" (click)="next()">DALJE</button>
+        </div>        
+        <div class="col-sm-4"></div> <!-- Empty column for spacing -->
+
+        <!-- progress bar -->
+        <div class="col-sm-4"></div><!-- Empty column for spacing -->
+        <div class="col-sm-4">
+            <div  *ngIf="fileStatus.status == 'progress'">
+                <br>
+                <div class="progress">
+                    <div [style.width.%]="fileStatus.percent" class="progress-bar progress-bar-animated custom-progress-bar" role="progressbar" aria-valuenow="">
+                        {{fileStatus.requestType}}: {{fileStatus.percent}}%
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4"></div><!-- Empty column for spacing -->
+
+        <!-- pagination -->
+        <div class="col-sm-4" *ngIf="imageBlobs.length > 0"></div>
+        <div class="col-sm-4 justify-content-center d-flex" *ngIf="imageBlobs.length > 0">
+            <nav aria-label="Page navigation">
+                <br>
+                <ul class="pagination justify-content-center">
+                    <!-- prev page -->
+                    <li class="page-item pagination-danger-edge" [class.disabled]="currentPage === 1">
+                        <a class="page-link" href="#" (click)="onPrevPage(); $event.preventDefault();">&laquo;</a>
+                    </li>
+                    <!-- first page -->
+                    <li *ngIf="totalPages > 0" class="page-item" [class.active]="currentPage === 1">
+                        <a class="page-link" href="#" (click)="goToPage(1); $event.preventDefault();">1</a>
+                    </li>
+
+                    <!-- current page - 1 -->
+                    <li *ngIf="currentPage > 2 && currentPage <= totalPages" class="page-item"
+                        [class.active]="currentPage === currentPage - 1">
+                        <a class="page-link" href="#"
+                            (click)="goToPage(currentPage - 1); $event.preventDefault();">{{ currentPage - 1 }}</a>
+                    </li>
+
+                    <!-- current page -->
+                    <li *ngIf="currentPage > 1 && currentPage < totalPages" class="page-item" [class.active]="true">
+                        <a class="page-link" href="#" (click)="goToPage(currentPage); $event.preventDefault();">{{
+                            currentPage }}</a>
+                    </li>
+                    <!-- current page + 1 -->
+                    <li *ngIf="currentPage > 0 && currentPage < totalPages - 1" class="page-item"
+                        [class.active]="currentPage === currentPage + 1">
+                        <a class="page-link" href="#"
+                            (click)="goToPage(currentPage + 1); $event.preventDefault();">{{ currentPage + 1 }}</a>
+                    </li>
+                    <!-- last page -->
+                    <li *ngIf="totalPages - 2 > 0" class="page-item" [class.active]="currentPage === totalPages">
+                        <a class="page-link" href="#" (click)="goToPage(totalPages); $event.preventDefault();">{{
+                            totalPages }}</a>
+                    </li>
+                    <!-- next page -->
+                    <li class="page-item pagination-danger-edge" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" href="#" (click)="onNextPage(); $event.preventDefault();">&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-sm-4" *ngIf="imageBlobs.length > 0"></div>
+
+                <!-- uploaded photos preview -->
+                <div class="row mt-3" *ngIf="imageBlobs.length > 0">
+                    <h3>Izabrali ste {{imageBlobs.length}} fotografije/a.</h3>
+                    <div class="col-md-3" *ngFor="let image of getPaginatedItems(); let i = index">
+                        <div class="card">
+                            <!-- remove image button -->
+                            <button class="btn btn-danger remove-btn"
+                                (click)="removeImage((currentPage - 1)*itemsPerPage + i)">X</button>
+                            <img [src]="image" class="card-img-top" [style]="setImageStyles()">
+                            <div class="card-body">
+                                <!-- select option for picture format -->
+                                <div class="mb-3">
+                                    <select class="form-select text-center" id="pictureFormatSelect"
+                                        [(ngModel)]="imageFormats[(currentPage - 1)*itemsPerPage + i]">
+                                        <option value="izaberi" disabled>--IZABERITE FORMAT--</option>
+                                        <option value="9x13">9x13</option>
+                                        <option value="10x15">10x15</option>
+                                        <option value="13x18">13x18</option>
+                                        <option value="15x21">15x21</option>
+                                        <option value="15x30">15x30</option>
+                                        <option value="20x25">20x25</option>
+                                        <option value="20x30">20x30</option>
+                                        <option value="30x40">30x40</option>
+                                        <option value="20x50">20x50</option>
+                                        <option value="50x70">50x70</option>
+                                        <option value="polaroid">polaroid</option>
+                                    </select>
+                                </div>
+                                <!-- button for quantity -->
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-outline-secondary" type="button" [id]="'button-minus-' + i"
+                                        (click)="decrementValue(i)">-</button>
+                                    <input type="text" class="form-control text-center" value="1"
+                                        aria-describedby="button-addon1" [(ngModel)]="imageQuantities[i]"
+                                        (change)="changeValue(i, $event)">
+                                    <button class="btn btn-outline-secondary" type="button" [id]="'button-plus-' + i"
+                                        (click)="incrementValue(i)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+    </div>
+
+</div>

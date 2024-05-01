@@ -1,0 +1,88 @@
+iframe {
+  border: 1px solid #ccc; /* Change the color #ccc to whatever color you want for the border */
+  /*margin: 0 20px; /* This will add spacing to the left and right of the iframe */
+  width: calc(100% - 30px); /* This accounts for the 15px margin on each side */
+  height: 30vh;
+  box-sizing: border-box;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border-radius: 0.5rem; /* Adjust this value to get the desired roundness */
+}
+
+
+.red{
+color: red;
+}
+
+/* radio button select */
+
+/* Custom style for the radio button when it is checked */
+.form-check-input:checked {
+  accent-color: #dc3545; /* Using the 'accent-color' property */
+}
+
+/* General style for radio buttons */
+.form-check-input {
+  accent-color: #dc3545; /* Default Bootstrap primary color for unchecked state */
+}
+
+/* radio button select */
+
+/* Style for the label when the associated radio button is selected */
+.form-check-input:checked + .form-check-label {
+  color: white; /* For text color */
+  background-color: #dc3545; /* Bootstrap 'btn-danger' background color */
+  padding: .375rem .75rem; /* Bootstrap padding for buttons */
+  border-radius: .25rem; /* Bootstrap border-radius for buttons */
+  cursor: pointer; /* Cursor style */
+}
+
+/* Style for the label to make it look more like a button */
+.form-check-label {
+  display: inline-block;
+  padding: .375rem .75rem; /* Bootstrap padding for buttons */
+  margin-bottom: 0; /* Bootstrap style */
+  vertical-align: top;
+  cursor: pointer;
+  border-radius: .25rem; /* Bootstrap border-radius for buttons */
+  border: 1px solid transparent; /* Transparent border, takes up space for layout */
+}
+
+/* Ensure the input (radio button) is not displayed */
+.form-check-input {
+  position: absolute;
+  left: -9999px;
+}
+
+/* slide panel */
+.slide-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+.slide-panel .handle {
+  padding: 0.5rem 1rem;
+  background: rgba(236,160,61,255);
+  cursor: pointer;
+}
+.slide-panel-content {
+  padding: 1rem;
+}
+
+.order-details {
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  padding: 1rem;
+  margin-bottom: 15px; /* Spacing below the box */
+  border-radius: 0.5rem; /* Adjust this value to get the desired roundness */
+}
+
+.order-details-header{
+  background-color: rgba(236, 160, 61, 1); /* Corrected alpha value to 1 for full opacity */
+  padding: 1rem; /* Padding to match the design */
+  border-top-left-radius: 0.5rem; /* If the order-details has rounded corners, match these */
+  border-top-right-radius: 0.5rem;
+}
