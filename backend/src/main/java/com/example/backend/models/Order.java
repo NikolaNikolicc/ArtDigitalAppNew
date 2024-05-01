@@ -1,6 +1,6 @@
 package com.example.backend.models;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 public class Order {
     Integer orderID;
@@ -13,8 +13,13 @@ public class Order {
     String postal;
     String city;
     String address;
-    public Order(Integer orderID, String name, String surname, String mail, String phone, String comment, Timestamp date,
-            String postal, String city, String address) {
+    String paperBacking;
+    String promoCode;
+    String payment;
+    
+    public Order(Integer orderID, String name, String surname, String mail, String phone, String comment,
+            Timestamp date, String postal, String city, String address, String paperBacking, String promoCode,
+            String payment) {
         this.orderID = orderID;
         this.name = name;
         this.surname = surname;
@@ -25,6 +30,27 @@ public class Order {
         this.postal = postal;
         this.city = city;
         this.address = address;
+        this.paperBacking = paperBacking;
+        this.promoCode = promoCode;
+        this.payment = payment;
+    }
+    public String getPaperBacking() {
+        return paperBacking;
+    }
+    public void setPaperBacking(String paperBacking) {
+        this.paperBacking = paperBacking;
+    }
+    public String getPromoCode() {
+        return promoCode;
+    }
+    public void setPromoCode(String promoCode) {
+        this.promoCode = promoCode;
+    }
+    public String getPayment() {
+        return payment;
+    }
+    public void setPayment(String payment) {
+        this.payment = payment;
     }
     public Integer getOrderID() {
         return orderID;
@@ -86,6 +112,4 @@ public class Order {
     public void setAddress(String address) {
         this.address = address;
     }
-
-    
 }

@@ -229,7 +229,6 @@ export class ExtrasComponent implements OnInit {
 
   moveToNextPage() {
     if (this.termsOfUsage) {
-      localStorage.setItem("extras", JSON.stringify(this.extrasBlobs));
       localStorage.setItem("extrasLength", JSON.stringify(this.extrasBlobs.length));
       localStorage.setItem("extrasChosen", JSON.stringify(this.extrasChosen));
       this.router.navigate(["details"]);

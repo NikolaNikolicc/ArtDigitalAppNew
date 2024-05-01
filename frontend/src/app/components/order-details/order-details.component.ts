@@ -1,5 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Order } from 'src/app/models/order';
+import { SessionService } from 'src/app/services/session.service';
 
 declare var bootstrap: any; // This is for Bootstrap's JavaScript
 
@@ -31,7 +33,7 @@ export class OrderDetailsComponent implements OnInit {
   // session info
   sessionID: number = 0;
 
-  constructor(private router: Router, private _eref: ElementRef) {
+  constructor(private databaseService: SessionService,private router: Router, private _eref: ElementRef) {
 
   }
   ngOnInit(): void {
@@ -147,17 +149,35 @@ export class OrderDetailsComponent implements OnInit {
       modal.show();
       return;
     }
-    localStorage.setItem("name", this.name);
-    localStorage.setItem("surname", this.surname);
-    localStorage.setItem("email", this.email);
-    localStorage.setItem("phone", this.phone);
-    localStorage.setItem("pickup", this.pickupMethod);
-    localStorage.setItem("location", this.location);
-    localStorage.setItem("postal", this.postal);
-    localStorage.setItem("city", this.city);
-    localStorage.setItem("address", this.address);
-    localStorage.setItem("comment", this.comment);
-    this.router.navigate(["final"]);
+    const o = new Order();
+    o.name = this.name;
+    o.surname = this.surname;
+    o.mail = this.email;
+    o.phone = this.phone;
+    switch(this.pickupMethod){
+      case "licno":
+        o.postal = "licno preuzimanje";
+        o.city = "licno preuzimanje";
+        o.address = this.location;
+        break;
+      case "kurir":
+        o.postal = this.postal;
+        o.city = this.city;
+        o.address = this.address;
+        break;
+      default:
+        o.postal = "licno preuzimanje";
+        o.city = "licno preuzimanje";
+        o.address = this.location;
+        break;
+    }
+    o.comment = this.comment;
+    o.orderID = this.sessionID;
+    o.promoCode = this.promo;
+    let pb = localStorage.getItem("paperBacking");
+    if(pb == null)return;
+    o.paperBacking = pb;
+    this.databaseService.saveUser(o).subscribe();
   }
 
 }

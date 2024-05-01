@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.db.DatabaseRepo;
 import com.example.backend.db.DatabaseRepoInterface;
+import com.example.backend.models.Order;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/database")
@@ -18,5 +22,11 @@ public class DatabaseController {
     public Integer insertNewRowInDatabase(){
         return databaseRepoInterface.insert();
     }
+
+    @PostMapping("saveUserDetails")
+    public void saveUser(@RequestBody Order o) {
+        databaseRepoInterface.save(o);
+    }
+    
 
 }
