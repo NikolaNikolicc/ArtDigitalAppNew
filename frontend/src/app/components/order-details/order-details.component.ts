@@ -168,7 +168,7 @@ export class OrderDetailsComponent implements OnInit {
       default:
         o.postal = "licno preuzimanje";
         o.city = "licno preuzimanje";
-        o.address = this.location;
+        o.address = "Terazije 5";
         break;
     }
     o.comment = this.comment;
@@ -177,7 +177,19 @@ export class OrderDetailsComponent implements OnInit {
     let pb = localStorage.getItem("paperBacking");
     if(pb == null)return;
     o.paperBacking = pb;
-    this.databaseService.saveUser(o).subscribe();
+    this.databaseService.saveUser(o).subscribe(
+      data=>{
+        if(data){
+          if(data == -1){
+            alert("Doslo je do greske.");
+          }
+          else{
+            alert("Uspesno izvrsena posiljka. Vas broj posiljke: " + data);
+          }
+          
+        }
+      }
+    );
   }
 
 }

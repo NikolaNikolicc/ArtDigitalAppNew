@@ -24,8 +24,8 @@ public class DatabaseController {
     }
 
     @PostMapping("saveUserDetails")
-    public void saveUser(@RequestBody Order o) {
-        databaseRepoInterface.save(o);
+    public Integer saveUser(@RequestBody Order o) {
+        return databaseRepoInterface.save(o);
     }
     
 

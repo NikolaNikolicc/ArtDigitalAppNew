@@ -6,6 +6,6 @@ public interface DatabaseRepoInterface {
 
     Integer insert();
 
-    Object save(Order o);
+    Integer save(Order o);
     
 }

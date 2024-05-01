@@ -34,7 +34,7 @@ public class DatabaseRepo implements DatabaseRepoInterface{
     }
 
     @Override
-    public Object save(Order o) {
+    public Integer save(Order o) {
         final String sql = "UPDATE `artdigital`.`ordertable` " + 
         "SET name = ?, " + 
         "    surname = ?, " + 
@@ -63,11 +63,12 @@ public class DatabaseRepo implements DatabaseRepoInterface{
             stm.setString(11, o.getPayment());
             stm.setInt(12, o.getOrderID());
             stm.executeUpdate();
+            return o.getOrderID();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
     
 }
