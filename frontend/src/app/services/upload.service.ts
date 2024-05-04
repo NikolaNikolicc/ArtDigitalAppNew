@@ -1,12 +1,11 @@
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
-
   private server = "http://localhost:8080"
 
   constructor(private http: HttpClient) { }
@@ -29,5 +28,14 @@ export class UploadService {
   }
 
   // define function to download files
-
+  download(foldername: string): Observable<Blob> {
+    const url = `${this.server}/file/download/${foldername}`;
+    return this.http.get(url, {
+      responseType: 'blob',
+      reportProgress: true,
+      observe: 'response'
+    }).pipe(
+      map(response => response.body!)
+    );
+  }
 }

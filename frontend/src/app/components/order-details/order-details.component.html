@@ -19,6 +19,26 @@
                 </div>
             </div>
         </div>
+        <div class="modal" id="successModal" #successModal tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Uspešno obavljena porudžbina</h3>
+                    </div>
+
+                    <div class="modal-body text-start">
+                        {{ this.message }}
+                        <button (click)="downloadFolder()">preuzmi slike</button>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="goToSite()">
+                            Razumem
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <br>
         <div class="col-sm-2"></div>
         <div class="col-sm-3">

@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 import com.example.backend.models.Order;
 
-public class DatabaseRepo implements DatabaseRepoInterface{
+public class RepoDatabase implements InterfaceDatabaseRepo{
 
     @Override
     public Integer insert() {
@@ -69,6 +69,37 @@ public class DatabaseRepo implements DatabaseRepoInterface{
             e.printStackTrace();
         }
         return -1;
+    }
+
+    @Override
+    public Order getOrderDetails(Integer orderID) {
+        try (Connection conn = DB.source().getConnection();
+                PreparedStatement stm = conn.prepareStatement("SELECT * FROM ordertable WHERE orderID = ?");) {
+            stm.setInt(1, orderID);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Order order = new Order(
+                    orderID, 
+                    rs.getString("name"), 
+                    rs.getString("surname"), 
+                    rs.getString("mail"), 
+                    rs.getString("phone"), 
+                    rs.getString("comment"), 
+                    rs.getTimestamp("date"), 
+                    rs.getString("postal"), 
+                    rs.getString("city"), 
+                    rs.getString("address"), 
+                    rs.getString("paperBacking"), 
+                    rs.getString("promoCode"), 
+                    rs.getString("payment")
+                );
+                return order;
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return new Order(-1, "Greška", "Greška", "Greška", "Greška", "Greška", null, "Greška", "Greška", "Greška", "Greška", "Greška", "Greška");
     }
     
 }

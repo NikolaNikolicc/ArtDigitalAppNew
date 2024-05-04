@@ -122,7 +122,6 @@ export class IndexComponent implements AfterViewInit, OnInit {
       } else {
         this.imageFormats.push('izaberi');
       }
-      // Here you can either upload each blob right away or collect them in an array to upload later
 
       // Create a FileReader to read the blob
       const reader = new FileReader();
@@ -369,6 +368,7 @@ export class IndexComponent implements AfterViewInit, OnInit {
     localStorage.setItem('imageBlobsLength', String(this.imageBlobs.length));
     localStorage.setItem('imageID', JSON.stringify(this.imageID));
     localStorage.setItem('paperBacking', this.paperBacking);
+    localStorage.setItem('prevPage', JSON.stringify(1));
     this.onUploadFiles();
   }
 
@@ -390,10 +390,10 @@ export class IndexComponent implements AfterViewInit, OnInit {
   private reportProgress(httpEvent: HttpEvent<string[]>): void {
     switch (httpEvent.type) {
       case HttpEventType.UploadProgress:
-        this.updateStatus(httpEvent.loaded, httpEvent.total!, "Uploading");
+        this.updateStatus(httpEvent.loaded, httpEvent.total!, "Slanje fotografija");
         break;
       case HttpEventType.DownloadProgress:
-        this.updateStatus(httpEvent.loaded, httpEvent.total!, "Downloading");
+        this.updateStatus(httpEvent.loaded, httpEvent.total!, "Preuzimanje");
         break;
       case HttpEventType.ResponseHeader:
         console.log("Header returned", httpEvent);

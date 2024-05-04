@@ -49,7 +49,7 @@
         <div class="col-sm-4"></div> <!-- Empty column for spacing -->
         <div class="col-sm-4">
             <br>
-            <button class="btn btn-danger w-100" (click)="photoInput.click()">
+            <button class="btn btn-danger w-100" (click)="photoInput.click()" [disabled]="fileStatus.status == 'progress'">
                 <span *ngIf="imageBlobs.length == 0">DODAJ SLIKE</span>
                 <span *ngIf="imageBlobs.length != 0">DODAJ JOŠ SLIKA</span>
             </button>
@@ -65,7 +65,7 @@
         <div class="col-sm-4">
             <h3>Podesite dimenziju svih fotografija:</h3><br>
             <select class="form-select text-center" name="" id="" [(ngModel)]="photoFormat"
-                (change)="setAllFormats($event)">
+                (change)="setAllFormats($event)" [disabled]="fileStatus.status == 'progress'">
                 <option value="" disabled selected>--IZABERITE ŽELJENI FORMAT--</option>
                 <option value="9x13">9x13</option>
                 <option value="10x15">10x15</option>
@@ -81,12 +81,12 @@
             <h3>Izaberite tip podloge papira:</h3>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="paperBacking" id="mat" [(ngModel)]="paperBacking"
-                    value="mat" checked>
+                    value="mat" checked [disabled]="fileStatus.status == 'progress'">
                 <label class="form-check-label" for="mat">Mat</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="paperBacking" id="sjaj" [(ngModel)]="paperBacking"
-                    value="sjaj">
+                    value="sjaj" [disabled]="fileStatus.status == 'progress'">
                 <label class="form-check-label" for="sjaj">Sjaj</label>
             </div>
         </div>
@@ -94,7 +94,7 @@
         <div class="col-sm-4"></div> <!-- Empty column for spacing -->
         <div class="col-sm-4">
             <br>
-            <button class="btn btn-danger w-100" (click)="next()">DALJE</button>
+            <button class="btn btn-danger w-100" (click)="next()" [disabled]="fileStatus.status == 'progress'">DALJE</button>
         </div>        
         <div class="col-sm-4"></div> <!-- Empty column for spacing -->
 
@@ -166,13 +166,13 @@
                         <div class="card">
                             <!-- remove image button -->
                             <button class="btn btn-danger remove-btn"
-                                (click)="removeImage((currentPage - 1)*itemsPerPage + i)">X</button>
+                                (click)="removeImage((currentPage - 1)*itemsPerPage + i)" [disabled]="fileStatus.status == 'progress'">X</button>
                             <img [src]="image" class="card-img-top" [style]="setImageStyles()">
                             <div class="card-body">
                                 <!-- select option for picture format -->
                                 <div class="mb-3">
                                     <select class="form-select text-center" id="pictureFormatSelect"
-                                        [(ngModel)]="imageFormats[(currentPage - 1)*itemsPerPage + i]">
+                                        [(ngModel)]="imageFormats[(currentPage - 1)*itemsPerPage + i]" [disabled]="fileStatus.status == 'progress'">
                                         <option value="izaberi" disabled>--IZABERITE FORMAT--</option>
                                         <option value="9x13">9x13</option>
                                         <option value="10x15">10x15</option>
@@ -190,12 +190,12 @@
                                 <!-- button for quantity -->
                                 <div class="input-group mb-3">
                                     <button class="btn btn-outline-secondary" type="button" [id]="'button-minus-' + i"
-                                        (click)="decrementValue(i)">-</button>
+                                        (click)="decrementValue(i)" [disabled]="fileStatus.status == 'progress'">-</button>
                                     <input type="text" class="form-control text-center" value="1"
                                         aria-describedby="button-addon1" [(ngModel)]="imageQuantities[i]"
-                                        (change)="changeValue(i, $event)">
+                                        (change)="changeValue(i, $event)" [disabled]="fileStatus.status == 'progress'">
                                     <button class="btn btn-outline-secondary" type="button" [id]="'button-plus-' + i"
-                                        (click)="incrementValue(i)">+</button>
+                                        (click)="incrementValue(i)" [disabled]="fileStatus.status == 'progress'">+</button>
                                 </div>
                             </div>
                         </div>

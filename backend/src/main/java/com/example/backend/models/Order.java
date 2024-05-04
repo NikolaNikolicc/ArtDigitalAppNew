@@ -16,7 +16,26 @@ public class Order {
     String paperBacking;
     String promoCode;
     String payment;
+
     
+    
+    @Override
+    public String toString() {
+        return "\t\t\tDETALJI PORUDŽBINE\n" + 
+        "Redni broj porudžbine: " + this.getOrderID() + "\n" + 
+        "Ime: " + this.getName() + "\n" + 
+        "Prezime: " + this.getSurname() + "\n" + 
+        "Mejl: " + this.getMail() + "\n" + 
+        "Telefon: " + this.getPhone() + "\n" + 
+        "Komentar: " + this.getComment() + "\n" + 
+        "Datum kreiranja porudžbine: " + this.getDate() + "\n" + 
+        "Poštanski kod: " + this.getPostal() + "\n" + 
+        "Grad: " + this.getCity() + "\n" + 
+        "Adresa: " + this.getAddress() + "\n" + 
+        "Podloga: " + this.getPaperBacking() + "\n" + 
+        "Promo kod: " + this.getPromoCode() + "\n";
+    }
+
     public Order(Integer orderID, String name, String surname, String mail, String phone, String comment,
             Timestamp date, String postal, String city, String address, String paperBacking, String promoCode,
             String payment) {

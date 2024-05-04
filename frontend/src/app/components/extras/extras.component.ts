@@ -37,13 +37,17 @@ export class ExtrasComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    let pp = localStorage.getItem("prevPage");
     let sid = localStorage.getItem("sessionID");
     let p = localStorage.getItem("photos");
     let iid = localStorage.getItem("imageID");
-    if (p == null || iid == null || sid == null) return;
-    this.imageID = JSON.parse(iid);
-    this.sessionID = JSON.parse(sid);
-    let photos = JSON.parse(p);
+    if (p == null || iid == null || sid == null || pp == null){
+      this.router.navigate([""]);
+    }
+    if(parseInt(JSON.parse(pp!)) != 1)this.router.navigate([""]);
+    this.imageID = JSON.parse(iid!);
+    this.sessionID = JSON.parse(sid!);
+    let photos = JSON.parse(p!);
     this.numberOfPosibleExtras = Math.floor(photos / 100);
   }
 
@@ -231,6 +235,7 @@ export class ExtrasComponent implements OnInit {
     if (this.termsOfUsage) {
       localStorage.setItem("extrasLength", JSON.stringify(this.extrasBlobs.length));
       localStorage.setItem("extrasChosen", JSON.stringify(this.extrasChosen));
+      localStorage.setItem("prevPage", JSON.stringify(2));
       this.router.navigate(["details"]);
     }
   }

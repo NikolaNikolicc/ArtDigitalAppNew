@@ -1,7 +1,9 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Order } from 'src/app/models/order';
+import { EmailService } from 'src/app/services/email.service';
 import { SessionService } from 'src/app/services/session.service';
+import { UploadService } from 'src/app/services/upload.service';
 
 declare var bootstrap: any; // This is for Bootstrap's JavaScript
 
@@ -13,6 +15,7 @@ declare var bootstrap: any; // This is for Bootstrap's JavaScript
 export class OrderDetailsComponent implements OnInit {
 
   @ViewChild('errorModal') modalError!: ElementRef;
+  @ViewChild('successModal') modalSuccess!: ElementRef;
   pickupMethod: string = "licno";
   name: string = "";
   surname: string = "";
@@ -32,23 +35,31 @@ export class OrderDetailsComponent implements OnInit {
   extrasChosen: string = "";
   // session info
   sessionID: number = 0;
+  // success message
+  message: string = "";
 
-  constructor(private databaseService: SessionService,private router: Router, private _eref: ElementRef) {
+  constructor(private fileService: UploadService, private emailservice: EmailService, private databaseService: SessionService,private router: Router, private _eref: ElementRef) {
 
   }
   ngOnInit(): void {
     window.scrollTo(0, 0);
+    let pp = localStorage.getItem("prevPage");
     let sid = localStorage.getItem("sessionID");
     let nop = localStorage.getItem("imageBlobsLength");
     let noe = localStorage.getItem("extrasLength");
     let ec = localStorage.getItem("extrasChosen");
     let tp = localStorage.getItem("totalPrice")
-    if (nop != null && noe != null && ec != null && sid != null && tp != null) {
+    if (nop != null && noe != null && ec != null && sid != null && tp != null && pp != null) {
+      if(parseInt(JSON.parse(pp)) == 1){
+        this.router.navigate(["extras"]);
+      }
       this.numberOfPictures = JSON.parse(nop);
       this.numberOfExtras = JSON.parse(noe) / 6;
       this.extrasChosen = JSON.parse(ec);
       this.sessionID = JSON.parse(sid);
       this.totalPrice = JSON.parse(tp);
+    }else{
+      this.router.navigate([""]);
     }
   }
 
@@ -64,6 +75,15 @@ export class OrderDetailsComponent implements OnInit {
         slidePanelContent.classList.remove('show');
       }
     }
+  }
+
+  downloadFolder() {
+    this.fileService.download(this.sessionID.toString()).subscribe(blob => {
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = this.sessionID.toString() + '.zip';
+      link.click();
+    });
   }
 
   validateEmail(): boolean {
@@ -156,8 +176,8 @@ export class OrderDetailsComponent implements OnInit {
     o.phone = this.phone;
     switch(this.pickupMethod){
       case "licno":
-        o.postal = "licno preuzimanje";
-        o.city = "licno preuzimanje";
+        o.postal = "lično preuzimanje";
+        o.city = "lično preuzimanje";
         o.address = this.location;
         break;
       case "kurir":
@@ -166,8 +186,8 @@ export class OrderDetailsComponent implements OnInit {
         o.address = this.address;
         break;
       default:
-        o.postal = "licno preuzimanje";
-        o.city = "licno preuzimanje";
+        o.postal = "lično preuzimanje";
+        o.city = "lično preuzimanje";
         o.address = "Terazije 5";
         break;
     }
@@ -184,12 +204,26 @@ export class OrderDetailsComponent implements OnInit {
             alert("Doslo je do greske.");
           }
           else{
-            alert("Uspesno izvrsena posiljka. Vas broj posiljke: " + data);
+            // alert("Uspešno poručene slike. Broj Vaše porudžbine: " + data);
+            // send confirmation mail
+            
+            // show success modal
+            this.message = "Uspešno poručene slike. Broj Vaše porudžbine: " + data;
+            const modalNative: HTMLElement = this.modalSuccess.nativeElement;
+            const modal = new bootstrap.Modal(modalNative, {
+              backdrop: 'static', // Prevents closing when clicking outside
+              keyboard: false // Prevents closing with the escape key
+            });
+            modal.show();            
           }
-          
+          localStorage.clear();
         }
       }
     );
+  }
+
+  goToSite(){
+    window.location.href = 'https://fotostudioart.rs/';
   }
 
 }
